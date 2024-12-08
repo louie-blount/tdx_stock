@@ -1,41 +1,23 @@
-from pytdx.hq import TdxHq_API
+from utils import read_stock_data
+from lday_reader import calculate_rise_fall_percentage
 
-# 创建 API 实例
-api = TdxHq_API()
+def main():
+    """
+    主程序入口
+    """
+    # 替换为你的实际文件路径
+    file_path = r"D:\Code\Python\program\tdx_stock\stock_reader\全部Ａ股20241208.txt"
 
-try:
-    # 连接到行情服务器
-    if not api.connect('180.153.18.170', 7709):
-        print("服务器连接失败！")
-        exit()
+    # 读取股票数据 [stocks 中存储的是当日所有主板股票行情]
+    stocks = read_stock_data(file_path)
 
-    # 获取沪市股票列表
-    shanghai_codes = []
-    start = 0
-    while True:
-        data = api.get_security_list(1, start)  # 1 表示沪市
-        if not data:  # 如果没有数据，表示已经获取完毕
-            break
-        shanghai_codes.extend([d['code'] for d in data])
-        start += len(data)
+    # 打印前3条记录
+    print("股票数据样例：")
+    for stock in stocks[:3]:
+        print(vars(stock))  # 打印对象属性
+        rise_fall_percentage = calculate_rise_fall_percentage(stock)
+        print(f"涨跌百分位: {rise_fall_percentage}")  # 涨跌百分位
+    
 
-    # 获取深市股票列表
-    shenzhen_codes = []
-    start = 0
-    while True:
-        data = api.get_security_list(0, start)  # 0 表示深市
-        if not data:
-            break
-        shenzhen_codes.extend([d['code'] for d in data])
-        start += len(data)
-
-    # 合并沪深股票代码
-    print(f"上海主板 {len(shanghai_codes)} 只股票代码：")
-    print(shanghai_codes)
-    print(f"深圳主板 {len(shenzhen_codes)} 只股票代码：")
-    # print(shenzhen_codes)
-
-except Exception as e:
-    print(f"发生错误：{e}")
-finally:
-    api.disconnect()
+if __name__ == "__main__":
+    main()
