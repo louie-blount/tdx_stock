@@ -1,4 +1,4 @@
-from stock import Stock
+from stock_reader.stock import Stock
 import csv
 
 def read_stock_data(file_path):

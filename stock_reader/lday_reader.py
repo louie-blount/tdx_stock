@@ -82,3 +82,31 @@ def calculate_rise_fall_percentage(stock, data_dir_sh="D:\\Stocks\\new_tdx\\vipd
     # 计算涨跌位百分比
     rise_fall_percentage = (current_price - lowest_price) / (highest_price - lowest_price) * 100
     return rise_fall_percentage
+
+
+
+
+
+
+def judge_lday_file_exists(stock, data_dir_sh="D:\\Stocks\\new_tdx\\vipdoc\\sh\\lday", data_dir_sz="D:\\Stocks\\new_tdx\\vipdoc\\sz\\lday"):
+    """
+    判断通达信历史日线数据是否存在
+
+    Args:
+        stock (Stock): Stock 对象，包含股票代码和当前价格。
+        data_dir_sh (str): 上证历史数据目录。
+        data_dir_sz (str): 深证历史数据目录。
+
+    Returns:
+        bool: 是否存在
+    """
+    # 判断股票市场
+    if stock.code.startswith("6"):  # 上证股票
+        file_path = os.path.join(data_dir_sh, f"sh{stock.code}.day")
+    elif stock.code.startswith(("0", "3")):  # 深证股票
+        file_path = os.path.join(data_dir_sz, f"sz{stock.code}.day")
+    else:
+        raise ValueError(f"无法确定市场，股票代码: {stock.code}")
+
+
+    return os.path.exists(file_path)

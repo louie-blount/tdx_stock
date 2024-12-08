@@ -167,6 +167,8 @@ class Stock:
         self.self_select_date = self_select_date  # 自选日期
         self.self_select_price = self_select_price  # 自选价
         self.self_select_return_percent = self_select_return_percent  # 自选收益%
+        
+        self.rise_fall_percentage = 200 #自定义字段，涨跌百分位
 
 
 
