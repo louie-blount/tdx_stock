@@ -77,10 +77,10 @@ def calculate_rise_fall_percentage(stock, data_dir_sh="D:\\Stocks\\new_tdx\\vipd
     # 确保 current_price 是浮点数
     current_price = float(stock.current_price)
     
-    print(f"过去999个交易日最高价: {highest_price} 最低价: {lowest_price} 现价：{current_price}")  # 打印
-
     # 计算涨跌位百分比
     rise_fall_percentage = (current_price - lowest_price) / (highest_price - lowest_price) * 100
+    print(f"股票 {stock.name} {stock.code} 过去999个交易日最高价: {highest_price} 最低价: {lowest_price} 现价：{current_price} 涨跌位：{rise_fall_percentage}%")  # 打印
+    
     return rise_fall_percentage
 
 

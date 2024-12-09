@@ -28,7 +28,7 @@ class MicroStrategy(Strategy):
             return 0.0
 
     @staticmethod
-    def safe_float(value, default=-1):
+    def safe_float(value, default= float('inf')):
         """
         将字符串转换为浮点数，若无法转换则返回默认值。
 
@@ -74,6 +74,7 @@ class MicroStrategy(Strategy):
         # 筛选涨跌位小于 27 的股票，同时更新每个股票的 `rise_fall_percentage` 属性
         for stock in filtered_stocks:
             stock.rise_fall_percentage = calculate_rise_fall_percentage(stock)
+            stock.net_profit_margin_percent = stock.net_profit_margin_percent.replace("㈢", "")
 
         filtered_stocks = [s for s in filtered_stocks if s.rise_fall_percentage < 27]
 
@@ -83,6 +84,9 @@ class MicroStrategy(Strategy):
         pe_sorted = sorted(filtered_stocks, key=lambda x: self.safe_float(x.pe_ttm))
         roe_sorted = sorted(filtered_stocks, key=lambda x: self.safe_float(x.net_profit_margin_percent), reverse=True)
         div_yield_sorted = sorted(filtered_stocks, key=lambda x: self.safe_float(x.dividend_yield_percent), reverse=True)
+
+
+
 
         # 获取前50%股票的代码
         pe_top50 = {stock.code for stock in pe_sorted[:len(pe_sorted) // 2]}
