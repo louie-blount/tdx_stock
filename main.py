@@ -9,7 +9,7 @@ def main():
     主程序入口
     """
     # 替换为你的实际文件路径
-    file_path = r"D:\Code\Python\program\tdx_stock\stock_reader\全部Ａ股20241208.txt"
+    file_path = r"D:\Code\Python\program\tdx_stock\data\全部Ａ股20241209.txt"
 
     # 读取股票数据 [stocks 中存储的是当日所有主板股票行情]
     stocks = read_stock_data(file_path)

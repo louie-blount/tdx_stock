@@ -50,8 +50,8 @@ class MicroStrategy(Strategy):
 
         策略：
         1. 初步筛选：总市值小于 50 亿。
-        2. 市盈率(TTM)排名前50%。
-        3. 净资产收益率排名前50%。
+        2. 市盈率(TTM)排名前25%。
+        3. 净资产收益率排名前25%。
         4. 股息率排名前50%。
         5. 涨跌位小于27。
 
@@ -89,25 +89,25 @@ class MicroStrategy(Strategy):
 
 
         # 获取前50%股票的代码
-        pe_top50 = {stock.code for stock in pe_sorted[:len(pe_sorted) // 2]}
-        roe_top50 = {stock.code for stock in roe_sorted[:len(roe_sorted) // 2]}
+        pe_top25 = {stock.code for stock in pe_sorted[:len(pe_sorted) // 4]}
+        roe_top25 = {stock.code for stock in roe_sorted[:len(roe_sorted) // 4]}
         div_yield_top50 = {stock.code for stock in div_yield_sorted[:len(div_yield_sorted) // 2]}
 
         # 同时满足条件的股票
         selected_stocks = [
             stock for stock in filtered_stocks
-            if stock.code in pe_top50 and stock.code in roe_top50 and stock.code in div_yield_top50
+            if stock.code in pe_top25 and stock.code in roe_top25 and stock.code in div_yield_top50
         ]
 
         # 写入 CSV 文件
         with open(output_path, mode="w", encoding="utf-8-sig", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["代码", "名称", "当前价格", "市盈率(TTM)", "净资产收益率(%)", "股息率(%)", "涨跌位", "流通市值", "总市值"])
+            writer.writerow(["代码", "名称", "细分行业","当前价格", "市盈率(TTM)", "净资产收益率(%)", "股息率(%)", "涨跌位", "beta系数","流通市值", "总市值"])
             for stock in selected_stocks:
                 writer.writerow([
-                    stock.code, stock.name, stock.current_price,
+                    stock.code, stock.name, stock.sector, stock.current_price,
                     stock.pe_ttm, stock.net_profit_margin_percent, stock.dividend_yield_percent,
-                    stock.rise_fall_percentage, stock.circulating_market_value_z, stock.total_market_value_billion
+                    stock.rise_fall_percentage, stock.beta_coefficient ,stock.circulating_market_value_z, stock.total_market_value_billion
                 ])
 
         print(f"选股结果已输出至 {os.path.abspath(output_path)}")
