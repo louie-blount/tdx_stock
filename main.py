@@ -3,17 +3,18 @@ from stock_reader.lday_reader import calculate_rise_fall_percentage
 from stock_reader.lday_reader import judge_lday_file_exists
 from strats.strategy import Strategy
 from strats.micro_strategy import MicroStrategy
+from uitls.excel_util import save_stocks_to_excel
 
 def main():
     """
     主程序入口
     """
     # 替换为你的实际文件路径
-    file_path = r"D:\Code\Python\program\tdx_stock\data\全部Ａ股20241209.txt"
+    file_path = r"D:\Code\Python\program\tdx_stock\data\全部Ａ股20241212.txt"
 
     # 读取股票数据 [stocks 中存储的是当日所有主板股票行情]
     stocks = read_stock_data(file_path)
-    # 先過濾出有日綫的數據
+    # 先过滤出有日线的数据
     stocks = [s for s in stocks if judge_lday_file_exists(s)]
 
     # 打印前3条记录
@@ -26,7 +27,9 @@ def main():
         
         # 创建并执行策略
     strategy = MicroStrategy()
-    strategy.execute(stocks)
+    selected_stocks = strategy.execute(stocks)
+    
+    save_stocks_to_excel(selected_stocks)
     
 
 if __name__ == "__main__":
