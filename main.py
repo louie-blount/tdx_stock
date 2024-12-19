@@ -3,6 +3,7 @@ from stock_reader.lday_reader import calculate_rise_fall_percentage
 from stock_reader.lday_reader import judge_lday_file_exists
 from strats.strategy import Strategy
 from strats.micro_strategy import MicroStrategy
+from strats.middle_strategy import MiddleStrategy
 from uitls.excel_util import save_stocks_to_excel
 
 def main():
@@ -10,7 +11,8 @@ def main():
     主程序入口
     """
     # 替换为你的实际文件路径
-    file_path = r"D:\Code\Python\program\tdx_stock\data\全部Ａ股20241212.txt"
+    file_path = r"D:\Code\Python\program\tdx_stock\data\全部Ａ股20241219.txt"
+    # file_path = r"D:\Code\Python\program\tdx_stock\data\沪深300中证50020241216.txt"
 
     # 读取股票数据 [stocks 中存储的是当日所有主板股票行情]
     stocks = read_stock_data(file_path)
@@ -27,9 +29,11 @@ def main():
         
         # 创建并执行策略
     strategy = MicroStrategy()
+    # strategy = MiddleStrategy()
     selected_stocks = strategy.execute(stocks)
     
     save_stocks_to_excel(selected_stocks)
+    # save_stocks_to_excel(selected_stocks, "middle_output.csv")
     
 
 if __name__ == "__main__":
